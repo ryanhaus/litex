@@ -169,6 +169,7 @@ static uint8_t my_mac[6];
 static uint32_t my_ip;
 static uint32_t my_gateway_ip;
 static uint32_t my_subnet_mask;
+static bool do_subnet_check = false;
 
 void udp_set_ip(uint32_t ip)
 {
@@ -190,6 +191,11 @@ void udp_set_gateway_ip(uint32_t gateway_ip)
 void udp_set_subnet_mask(uint32_t subnet_mask)
 {
 	my_subnet_mask = subnet_mask;
+}
+
+void udp_do_subnet_check(bool do_check)
+{
+	do_subnet_check = do_check;
 }
 
 bool udp_address_in_subnet(uint32_t ip)
@@ -251,7 +257,7 @@ static const uint8_t broadcast[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 int udp_arp_resolve(uint32_t ip)
 {
 	/* First check if the IP address is in the subnet, substitute for gateway if not. */
-	if (udp_address_in_subnet(ip))
+	if (do_subnet_check && udp_address_in_subnet(ip))
 	{
 		ip = gateway_ip;
 	}
