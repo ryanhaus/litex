@@ -1866,7 +1866,7 @@ class LiteXSoC(SoC):
             )
 
     # Add Ethernet ---------------------------------------------------------------------------------
-    def add_ethernet(self, name="ethmac", phy=None, phy_cd="eth", dynamic_ip=False, software_debug=False,
+    def add_ethernet(self, name="ethmac", phy=None, phy_cd="eth", dynamic_ip=False, use_gateway=False, software_debug=False,
         data_width              = 8,
         nrxslots                = 2, rxslots_read_only  = True,
         ntxslots                = 2, txslots_write_only = False,
@@ -1875,6 +1875,8 @@ class LiteXSoC(SoC):
         with_timing_constraints = True,
         local_ip                = None,
         remote_ip               = None,
+        gateway_ip              = None,
+        subnet_mask             = None,
         mac_address             = None):
         # Imports
         from liteeth.mac import LiteEthMAC
@@ -1937,6 +1939,14 @@ class LiteXSoC(SoC):
         if dynamic_ip:
             assert local_ip is None
             self.add_constant("ETH_DYNAMIC_IP")
+
+        # Gateway/netmask (if enabled).
+        if use_gateway:
+            assert gateway_ip != None
+            assert subnet_mask != None
+            self.add_constant("ETH_NETBOOT_USE_GATEWAY")
+            add_ip_address_constants(self, "GATEWAYIP", gateway_ip)
+            add_ip_address_constants(self, "SUBNETMASK", subnet_mask)
 
         # Local/Remote IP Configuration (optional).
         if local_ip:
