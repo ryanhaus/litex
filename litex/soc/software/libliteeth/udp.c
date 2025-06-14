@@ -250,6 +250,12 @@ static const uint8_t broadcast[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 int udp_arp_resolve(uint32_t ip)
 {
+	/* First check if the IP address is in the subnet, substitute for gateway if not. */
+	if (udp_address_in_subnet(ip))
+	{
+		ip = gateway_ip;
+	}
+
 	struct arp_frame *arp;
 	int i;
 	int tries;
