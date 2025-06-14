@@ -322,6 +322,18 @@ static unsigned int remote_ip[4] = {REMOTEIP1, REMOTEIP2, REMOTEIP3, REMOTEIP4};
 static unsigned int remote_ip[4] = {192, 168, 1, 100};
 #endif
 
+#ifdef GATEWAYIP1
+static unsigned int gateway_ip[4] = {GATEWAYIP1, GATEWAYIP2, GATEWAYIP3, GATEWAYIP4};
+#else
+static unsigned int gateway_ip[4] = {192, 168, 1, 1};
+#endif
+
+#ifdef SUBNETMASK1
+static unsigned int subnet_mask[4] = {SUBNETMASK1, SUBNETMASK2, SUBNETMASK3, SUBNETMASK4};
+#else
+static unsigned int subnet_mask[4] = {255, 255, 255, 0};
+#endif
+
 static int copy_file_from_tftp_to_ram(unsigned int ip, unsigned short server_port,
 const char *filename, char *buffer)
 {
@@ -550,9 +562,17 @@ void netboot(int nb_params, char **params)
 
 	printf("Local IP: %d.%d.%d.%d\n", local_ip[0], local_ip[1], local_ip[2], local_ip[3]);
 	printf("Remote IP: %d.%d.%d.%d\n", remote_ip[0], remote_ip[1], remote_ip[2], remote_ip[3]);
+#ifdef ETH_NETBOOT_USE_GATEWAY
+	printf("Default Gateway: %d.%d.%d.%d\n", gateway_ip[0], gateway_ip[1], gateway_ip[2], gateway_ip[3]);
+	printf("Subnet Mask: %d.%d.%d.%d\n", subnet_mask[0], subnet_mask[1], subnet_mask[2], subnet_mask[3]);
+	udp_set_gateway_ip(IPTOINT(gateway_ip[0], gateway_ip[1], gateway_ip[2], gateway_ip[3]));
+	udp_set_subnet_mask(IPTOINT(subnet_mask[0], subnet_mask[1], subnet_mask[2], subnet_mask[3]));
+	udp_do_subnet_check(true);
+#endif
 
 	ip = IPTOINT(remote_ip[0], remote_ip[1], remote_ip[2], remote_ip[3]);
 	udp_start(macadr, IPTOINT(local_ip[0], local_ip[1], local_ip[2], local_ip[3]));
+
 
 	if (filename) {
 		printf("Booting from %s (JSON)...\n", filename);
