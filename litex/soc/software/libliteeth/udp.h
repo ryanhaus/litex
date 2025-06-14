@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 #define ETHMAC_EV_SRAM_WRITER	0x1
 #define ETHMAC_EV_SRAM_READER	0x1
 
@@ -18,6 +20,7 @@ void udp_set_ip(uint32_t ip);
 void udp_set_mac(const uint8_t *macaddr);
 void udp_set_gateway_ip(uint32_t gateway_ip);
 void udp_set_subnet_mask(uint32_t subnet_mask);
+bool udp_address_in_subnet(uint32_t ip);
 void udp_start(const uint8_t *macaddr, uint32_t ip);
 int udp_arp_resolve(uint32_t ip);
 void *udp_get_tx_buffer(void);

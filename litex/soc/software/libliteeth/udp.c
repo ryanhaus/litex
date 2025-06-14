@@ -192,6 +192,11 @@ void udp_set_subnet_mask(uint32_t subnet_mask)
 	my_subnet_mask = subnet_mask;
 }
 
+bool udp_address_in_subnet(uint32_t ip)
+{
+	return (my_ip & my_subnet_mask) == (ip & my_subnet_mask);
+}
+
 /* ARP cache - one entry only */
 static uint8_t cached_mac[6];
 static uint32_t cached_ip;
