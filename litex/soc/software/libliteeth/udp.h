@@ -16,6 +16,8 @@ typedef void (*udp_callback)(uint32_t src_ip, uint16_t src_port, uint16_t dst_po
 
 void udp_set_ip(uint32_t ip);
 void udp_set_mac(const uint8_t *macaddr);
+void udp_set_gateway_ip(uint32_t gateway_ip);
+void udp_set_subnet_mask(uint32_t subnet_mask);
 void udp_start(const uint8_t *macaddr, uint32_t ip);
 int udp_arp_resolve(uint32_t ip);
 void *udp_get_tx_buffer(void);

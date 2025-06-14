@@ -167,6 +167,8 @@ static void send_packet(void)
 
 static uint8_t my_mac[6];
 static uint32_t my_ip;
+static uint32_t my_gateway_ip;
+static uint32_t my_subnet_mask;
 
 void udp_set_ip(uint32_t ip)
 {
@@ -178,6 +180,16 @@ void udp_set_mac(const uint8_t *macaddr)
 	int i;
 	for(i=0;i<6;i++)
     		my_mac[i] = macaddr[i];
+}
+
+void udp_set_gateway_ip(uint32_t gateway_ip)
+{
+	my_gateway_ip = gateway_ip;
+}
+
+void udp_set_subnet_mask(uint32_t subnet_mask)
+{
+	my_subnet_mask = subnet_mask;
 }
 
 /* ARP cache - one entry only */
