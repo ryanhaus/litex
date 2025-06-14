@@ -259,7 +259,7 @@ int udp_arp_resolve(uint32_t ip)
 	/* First check if the IP address is in the subnet, substitute for gateway if not. */
 	if (do_subnet_check && udp_address_in_subnet(ip))
 	{
-		ip = gateway_ip;
+		ip = my_gateway_ip;
 	}
 
 	struct arp_frame *arp;
